@@ -1,17 +1,44 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SeatsPage() {
+    const { idSessao } = useParams();
+    const [assentosData, setAssentosData] = useState(undefined);
+    const [selecionados, setSelecionados] = useState([]);
+    console.log(selecionados)
+
+    useEffect(() => {
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
+
+        const promise = axios.get(url);
+        promise.then((res) => {
+            console.log(res.data);
+            setAssentosData(res.data);
+        })
+        promise.catch((err) => {
+            console.log(err.response.data);
+        })
+
+    }, [])
+
+    if (assentosData === undefined) { return <p>Carregando...</p> }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {assentosData.seats.map((seatInfo) => {
+                    return (
+                        <SeatItem
+                            selecionado={selecionados.includes(seatInfo.id) ? true : false}
+                            onClick={() => seatInfo.isAvailable ? setSelecionados([...selecionados, seatInfo.id]) : null}
+                            key={seatInfo.id} isAvailable={seatInfo.isAvailable}>{seatInfo.name}
+                        </SeatItem>
+                    )
+                })}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -41,11 +68,11 @@ export default function SeatsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={assentosData.movie.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{assentosData.movie.title}</p>
+                    <p>{assentosData.day.weekday} - {assentosData.day.date}</p>
                 </div>
             </FooterContainer>
 
@@ -94,10 +121,22 @@ const CaptionContainer = styled.div`
     width: 300px;
     justify-content: space-between;
     margin: 20px;
+    div>div {
+        background-color: #C3CFD9;
+        border: 1px #7B8B99;
+    }
+    div:first-of-type>div {
+        background-color: #1AAE9E;
+        border: 1px #0E7D71;
+    }
+    div:last-of-type>div {
+        background-color: #FBE192;
+        border: 1px #F7C52B;
+    }
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    //border: 1px solid blue;         // Essa cor deve mudar
+    //background-color: lightblue;    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -113,8 +152,8 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
+    background-color: ${props => props.selecionado ? "#1AAE9E" : props.isAvailable ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
+    border: 1px ${props => props.selecionado ? "#0E7D71": props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
