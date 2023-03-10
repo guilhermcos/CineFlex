@@ -7,7 +7,8 @@ export default function SeatsPage() {
     const { idSessao } = useParams();
     const [assentosData, setAssentosData] = useState(undefined);
     const [selecionados, setSelecionados] = useState([]);
-    console.log(selecionados)
+    const [nomeComprador, setNomeComprador] = useState("");
+    const [cpfComprador, setCpfComprador] = useState("");
 
     useEffect(() => {
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
@@ -23,6 +24,31 @@ export default function SeatsPage() {
 
     }, [])
 
+    function finalizarReserva(e) {
+        e.preventDefault();
+        
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`;
+        const promise = axios.post(url,
+            {
+                ids: selecionados,
+                name: nomeComprador,
+                cpf: cpfComprador 
+            }
+        )
+        promise.then((res) => {
+            console.log("sucesso");
+            console.log(res.data)
+        })
+        promise.catch((err) => {
+            console.log("erro");
+            console.log(err.response.data)
+        })
+
+
+        console.log(nomeComprador);
+        console.log(cpfComprador);
+    }
+
     if (assentosData === undefined) { return <p>Carregando...</p> }
 
     return (
@@ -34,7 +60,15 @@ export default function SeatsPage() {
                     return (
                         <SeatItem
                             selecionado={selecionados.includes(seatInfo.id) ? true : false}
-                            onClick={() => seatInfo.isAvailable ? setSelecionados([...selecionados, seatInfo.id]) : null}
+                            onClick={() => {
+                                if (!selecionados.includes(seatInfo.id)) {
+                                    seatInfo.isAvailable ? setSelecionados([...selecionados, seatInfo.id]) : alert("Esse assento não está disponível");
+                                } else {
+                                    const novoSelecionados = [...selecionados];
+                                    novoSelecionados.splice(selecionados.indexOf(seatInfo.id), 1);
+                                    setSelecionados(novoSelecionados);
+                                }
+                            }}
                             key={seatInfo.id} isAvailable={seatInfo.isAvailable}>{seatInfo.name}
                         </SeatItem>
                     )
@@ -57,13 +91,15 @@ export default function SeatsPage() {
             </CaptionContainer>
 
             <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <form onSubmit={finalizarReserva}>
+                    <label>Nome do Comprador:</label>
+                    <input value={nomeComprador} onChange={e => setNomeComprador(e.target.value)} type="text" placeholder="Digite seu nome..." required />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                    <label>CPF do Comprador:</label>
+                    <input value={cpfComprador} onChange={e => setCpfComprador(e.target.value)} type="number" placeholder="Digite seu CPF..." required />
 
-                <button>Reservar Assento(s)</button>
+                    <button type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
+                </form>
             </FormContainer>
 
             <FooterContainer>
@@ -153,7 +189,7 @@ const CaptionItem = styled.div`
 `
 const SeatItem = styled.div`
     background-color: ${props => props.selecionado ? "#1AAE9E" : props.isAvailable ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
-    border: 1px ${props => props.selecionado ? "#0E7D71": props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
+    border: 1px ${props => props.selecionado ? "#0E7D71" : props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
