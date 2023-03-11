@@ -7,6 +7,7 @@ export default function SeatsPage() {
     const { idSessao } = useParams();
     const [assentosData, setAssentosData] = useState(undefined);
     const [selecionados, setSelecionados] = useState([]);
+    const [compradores, setCompradores] = useState([])
     const [nomeComprador, setNomeComprador] = useState("");
     const [cpfComprador, setCpfComprador] = useState("");
 
@@ -26,13 +27,16 @@ export default function SeatsPage() {
 
     function finalizarReserva(e) {
         e.preventDefault();
+        const idsAssentos = selecionados.map((assento) => assento.id);
         
+        const arrayFinal = [{ids: idsAssentos, compradores: compradores}]
+        console.log(arrayFinal);
+
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`;
         const promise = axios.post(url,
             {
-                ids: selecionados,
-                name: nomeComprador,
-                cpf: cpfComprador 
+                ids: idsAssentos,
+                compradores: compradores
             }
         )
         promise.then((res) => {
@@ -49,6 +53,18 @@ export default function SeatsPage() {
         console.log(cpfComprador);
     }
 
+    function mudancaInput(id, inputName, inputValue){
+        const index = compradores.indexOf(compradores.filter((objeto) => objeto.idAssento === id)[0]);
+        const novoCompradores = compradores;
+        if (inputName === "nome"){
+            novoCompradores[index].nome = inputValue;
+            setCompradores(novoCompradores);
+        } else if (inputName === "cpf"){
+            novoCompradores[index].cpf = inputValue;
+            setCompradores(novoCompradores)
+        }
+    }
+
     if (assentosData === undefined) { return <p>Carregando...</p> }
 
     return (
@@ -59,17 +75,20 @@ export default function SeatsPage() {
                 {assentosData.seats.map((seatInfo) => {
                     return (
                         <SeatItem
-                            selecionado={selecionados.includes(seatInfo.id) ? true : false}
+                            selecionado={selecionados.some((objeto) => objeto.id === seatInfo.id)}
                             onClick={() => {
-                                if (!selecionados.includes(seatInfo.id)) {
-                                    seatInfo.isAvailable ? setSelecionados([...selecionados, seatInfo.id]) : alert("Esse assento não está disponível");
+                                if (!selecionados.some((objeto) => objeto.id === seatInfo.id)) {
+                                    seatInfo.isAvailable ? setSelecionados([...selecionados, { id: seatInfo.id, assento: seatInfo.name }]) : alert("Esse assento não está disponível");
+                                    setCompradores([...compradores, {idAssento: seatInfo.id, nome: null, cpf: null}])
+                                    console.log(compradores)
                                 } else {
-                                    const novoSelecionados = [...selecionados];
-                                    novoSelecionados.splice(selecionados.indexOf(seatInfo.id), 1);
-                                    setSelecionados(novoSelecionados);
+                                    setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
+                                    setCompradores((compradores) => compradores.filter((objeto) => objeto.idAssento !== seatInfo.id));
                                 }
                             }}
-                            key={seatInfo.id} isAvailable={seatInfo.isAvailable}>{seatInfo.name}
+                            key={seatInfo.id} isAvailable={seatInfo.isAvailable}
+                        >
+                            {seatInfo.name}
                         </SeatItem>
                     )
                 })}
@@ -92,11 +111,29 @@ export default function SeatsPage() {
 
             <FormContainer>
                 <form onSubmit={finalizarReserva}>
-                    <label>Nome do Comprador:</label>
-                    <input value={nomeComprador} onChange={e => setNomeComprador(e.target.value)} type="text" placeholder="Digite seu nome..." required />
+                    {selecionados.map((assento) => {
+                        return (
+                            <div key={Math.random()}>
+                                <label>Nome do Comprador Assento {assento.assento}:</label>
+                                <input
+                                    onChange={e => mudancaInput(assento.id, e.target.name, e.target.value)}
+                                    type="text"
+                                    name="nome"
+                                    placeholder="Digite seu nome..."
+                                    required
+                                />
 
-                    <label>CPF do Comprador:</label>
-                    <input value={cpfComprador} onChange={e => setCpfComprador(e.target.value)} type="number" placeholder="Digite seu CPF..." required />
+                                <label>CPF do Comprador Assento {assento.assento}:</label>
+                                <input
+                                    onChange={e => mudancaInput(assento.id, e.target.name, e.target.value)}
+                                    type="number"
+                                    name="cpf"
+                                    placeholder="Digite seu CPF..."
+                                    required
+                                />
+                            </div>
+                        )
+                    })}
 
                     <button type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
                 </form>
