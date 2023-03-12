@@ -28,12 +28,12 @@ export default function SeatsPage(props) {
     }, []);
 
     function retornaDados() {
-        let dadosCompradoresSucesso = selecionados.map((item) => {return {id: item.id, assento: item.assento, nome: null, cpf: null}});
+        let dadosCompradoresSucesso = selecionados.map((item) => { return { id: item.id, assento: item.assento, nome: null, cpf: null } });
         compradores.forEach((elemento, index) => {
             dadosCompradoresSucesso[index].nome = elemento.nome;
             dadosCompradoresSucesso[index].cpf = elemento.cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
         });
-        dadosCompradoresSucesso = {compradores: dadosCompradoresSucesso, movieInfo: assentosData.movie, dayInfo: assentosData.day, sessao: assentosData.name};
+        dadosCompradoresSucesso = { compradores: dadosCompradoresSucesso, movieInfo: assentosData.movie, dayInfo: assentosData.day, sessao: assentosData.name };
         setDadosCompra(dadosCompradoresSucesso);
     }
 
@@ -51,16 +51,13 @@ export default function SeatsPage(props) {
             }
         )
         promise.then((res) => {
-            console.log("sucesso");
-            console.log(res.data)
+            retornaDados();
+            navigate('/sucesso');
         })
         promise.catch((err) => {
             console.log("erro");
             console.log(err.response.data)
         })
-
-        retornaDados();
-        navigate('/sucesso');
 
     }
 
@@ -162,7 +159,7 @@ export default function SeatsPage(props) {
                 </div>
                 <div>
                     <p>{assentosData.movie.title}</p>
-                    <p>{assentosData.day.weekday} - {assentosData.day.date}</p>
+                    <p>{assentosData.day.weekday} - {assentosData.name}</p>
                 </div>
             </FooterContainer>
 
