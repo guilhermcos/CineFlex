@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import styled from "styled-components"
 import HomePage from "./pages/HomePage/HomePage"
@@ -7,6 +8,8 @@ import SuccessPage from "./pages/SuccessPage/SuccessPage"
 
 
 export default function App() {
+    const [dadosCompra, setDadosCompra] = useState(0);
+
     return (
         <BrowserRouter>
             <>
@@ -15,8 +18,8 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
-                    <Route path="/assentos/:idSessao" element={<SeatsPage />} />
-                    <Route path="" element={<SuccessPage />} />
+                    <Route path="/assentos/:idSessao" element={<SeatsPage setDadosCompra={setDadosCompra} />} />
+                    <Route path="/sucesso" element={<SuccessPage setDadosCompra={setDadosCompra} dadosCompra={dadosCompra} />} />
                 </Routes>
             </>
         </BrowserRouter>

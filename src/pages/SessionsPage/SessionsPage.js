@@ -28,17 +28,17 @@ export default function SessionsPage() {
             <div>
                 {sessionData.days.map((sessionDate) => {
                     return (
-                        <SessionContainer key={sessionDate.date}>
+                        <SessionContainer data-test="movie-day" key={sessionDate.date}>
                             {sessionDate.weekday} - {sessionDate.date}
                             <ButtonsContainer>
-                                {sessionDate.showtimes.map((session) => <Link key={session.id} to={`/assentos/${session.id}`}><button>{session.name}</button></Link>)}
+                                {sessionDate.showtimes.map((session) => <Link key={session.id} to={`/assentos/${session.id}`}><button data-test="showtime">{session.name}</button></Link>)}
                             </ButtonsContainer>
                         </SessionContainer>)
                 })}
 
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={sessionData.posterURL} alt="poster" />
                 </div>

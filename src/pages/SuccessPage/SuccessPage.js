@@ -1,31 +1,50 @@
+import { useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components"
 
-export default function SuccessPage() {
+export default function SuccessPage(props) {
+    const { dadosCompra, setDadosCompra } = props;
+    const navigate = useNavigate();
+
+
+    if (dadosCompra === 0) {
+        return (
+            <PageContainer>
+                <h1>Parece que a página foi atualizada</h1>
+                <Link onClick={setDadosCompra(0)} to={'/'}><button>Voltar para Home</button></Link>
+            </PageContainer>
+        )
+    }
 
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <p>{dadosCompra.movieInfo.title}</p>
+                <p>{dadosCompra.dayInfo.date} - {dadosCompra.sessao}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {dadosCompra.compradores.map((elemento) => <p key={elemento.assento}>Assento {elemento.assento}</p>)}
             </TextContainer>
 
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
+            <TextContainer data-test="client-info">
+                <strong><p>Compradores:</p></strong>
+                {dadosCompra.compradores.map((elemento) => {
+                    return (
+                        <>
+                            <p>Nome: {elemento.nome}</p>
+                            <p>CPF: {elemento.cpf}</p>
+                        </>
+                    )
+                })}
+
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <Link onClick={setDadosCompra(0)} to={'/'}><button data-test="go-home-btn">Voltar para Home</button></Link>
         </PageContainer>
     )
 }
@@ -67,5 +86,8 @@ const TextContainer = styled.div`
     strong {
         font-weight: bold;
         margin-bottom: 10px;
+    }
+    div {
+        margin-bottom: 15px;
     }
 `

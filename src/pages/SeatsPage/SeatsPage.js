@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 
-export default function SeatsPage() {
+export default function SeatsPage(props) {
+    const { setDadosCompra } = props;
     const { idSessao } = useParams();
     const [assentosData, setAssentosData] = useState(undefined);
     const [selecionados, setSelecionados] = useState([]);
-    const [compradores, setCompradores] = useState([])
+    const [compradores, setCompradores] = useState([]);
     const [nomeComprador, setNomeComprador] = useState("");
     const [cpfComprador, setCpfComprador] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
@@ -23,14 +25,23 @@ export default function SeatsPage() {
             console.log(err.response.data);
         })
 
-    }, [])
+    }, []);
+
+    function retornaDados() {
+        let dadosCompradoresSucesso = selecionados.map((item) => {return {id: item.id, assento: item.assento, nome: null, cpf: null}});
+        compradores.forEach((elemento, index) => {
+            dadosCompradoresSucesso[index].nome = elemento.nome;
+            dadosCompradoresSucesso[index].cpf = elemento.cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+        });
+        dadosCompradoresSucesso = {compradores: dadosCompradoresSucesso, movieInfo: assentosData.movie, dayInfo: assentosData.day, sessao: assentosData.name};
+        setDadosCompra(dadosCompradoresSucesso);
+    }
 
     function finalizarReserva(e) {
         e.preventDefault();
         const idsAssentos = selecionados.map((assento) => assento.id);
-        
-        const arrayFinal = [{ids: idsAssentos, compradores: compradores}]
-        console.log(arrayFinal);
+
+        const arrayFinal = [{ ids: idsAssentos, compradores: compradores }]
 
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`;
         const promise = axios.post(url,
@@ -48,18 +59,18 @@ export default function SeatsPage() {
             console.log(err.response.data)
         })
 
+        retornaDados();
+        navigate('/sucesso');
 
-        console.log(nomeComprador);
-        console.log(cpfComprador);
     }
 
-    function mudancaInput(id, inputName, inputValue){
+    function mudancaInput(id, inputName, inputValue) {
         const index = compradores.indexOf(compradores.filter((objeto) => objeto.idAssento === id)[0]);
         const novoCompradores = compradores;
-        if (inputName === "nome"){
+        if (inputName === "nome") {
             novoCompradores[index].nome = inputValue;
             setCompradores(novoCompradores);
-        } else if (inputName === "cpf"){
+        } else if (inputName === "cpf") {
             novoCompradores[index].cpf = inputValue;
             setCompradores(novoCompradores)
         }
@@ -76,10 +87,11 @@ export default function SeatsPage() {
                     return (
                         <SeatItem
                             selecionado={selecionados.some((objeto) => objeto.id === seatInfo.id)}
+                            data-test="seat"
                             onClick={() => {
                                 if (!selecionados.some((objeto) => objeto.id === seatInfo.id)) {
                                     seatInfo.isAvailable ? setSelecionados([...selecionados, { id: seatInfo.id, assento: seatInfo.name }]) : alert("Esse assento não está disponível");
-                                    setCompradores([...compradores, {idAssento: seatInfo.id, nome: null, cpf: null}])
+                                    setCompradores([...compradores, { idAssento: seatInfo.id, nome: null, cpf: null }])
                                     console.log(compradores)
                                 } else {
                                     setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
@@ -114,20 +126,25 @@ export default function SeatsPage() {
                     {selecionados.map((assento) => {
                         return (
                             <div key={Math.random()}>
-                                <label>Nome do Comprador Assento {assento.assento}:</label>
+                                <label>Nome do Comprador {assento.assento}:</label>
                                 <input
                                     onChange={e => mudancaInput(assento.id, e.target.name, e.target.value)}
+                                    data-test="client-name"
                                     type="text"
                                     name="nome"
                                     placeholder="Digite seu nome..."
                                     required
                                 />
 
-                                <label>CPF do Comprador Assento {assento.assento}:</label>
+                                <label>CPF do Comprador {assento.assento}:</label>
                                 <input
                                     onChange={e => mudancaInput(assento.id, e.target.name, e.target.value)}
-                                    type="number"
+                                    type="text"
+                                    data-test="client-cpf"
+                                    pattern="[0-9]*"
                                     name="cpf"
+                                    maxLength="11"
+                                    minLength="11"
                                     placeholder="Digite seu CPF..."
                                     required
                                 />
@@ -135,11 +152,11 @@ export default function SeatsPage() {
                         )
                     })}
 
-                    <button type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
+                    <button data-test="book-seat-btn" type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
                 </form>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={assentosData.movie.posterURL} alt="poster" />
                 </div>

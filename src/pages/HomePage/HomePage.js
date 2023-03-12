@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
-    const [filmes, setFilmes] = useState([])
+    const [filmes, setFilmes] = useState([]);
 
     useEffect(() => {
         const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
@@ -18,7 +18,11 @@ export default function HomePage() {
     }, []);
 
     if (filmes.length === 0) {
-        return (<p>Carregando...</p>);
+        return (
+            <PageContainer>
+                <h1>Carregando...</h1>
+            </PageContainer>
+        );
     }
 
     return (
@@ -27,7 +31,7 @@ export default function HomePage() {
             <ListContainer>
                 {filmes.map((filme) => {
                     return (
-                        <MovieContainer key={filme.title}>
+                        <MovieContainer data-test="movie" key={filme.title}>
                             <Link to={`sessoes/${filme.id}`}> <img src={filme.posterURL} alt="poster" /> </Link>
                         </MovieContainer>
                     )
@@ -43,12 +47,16 @@ const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-size: 24px;
     text-align: center;
     color: #293845;
     margin-top: 30px;
     padding-top: 70px;
+    h1 {
+        margin-top: 150px;
+        font-size: 40px;
+    }
 `
 const ListContainer = styled.div`
     width: 330px;
