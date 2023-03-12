@@ -215,20 +215,18 @@ const CaptionContainer = styled.div`
     margin: 20px;
     div>div {
         background-color: #C3CFD9;
-        border: 1px #7B8B99;
+        border: 1px solid #7B8B99;
     }
     div:first-of-type>div {
         background-color: #1AAE9E;
-        border: 1px #0E7D71;
+        border: 1px solid #0E7D71;
     }
     div:last-of-type>div {
         background-color: #FBE192;
-        border: 1px #F7C52B;
+        border: 1px solid #F7C52B;
     }
 `
 const CaptionCircle = styled.div`
-    //border: 1px solid blue;         // Essa cor deve mudar
-    //background-color: lightblue;    // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
@@ -245,7 +243,7 @@ const CaptionItem = styled.div`
 `
 const SeatItem = styled.div`
     background-color: ${props => props.selecionado ? "#1AAE9E" : props.isAvailable ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
-    border: 1px ${props => props.selecionado ? "#0E7D71" : props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
+    border: 1px solid ${props => props.selecionado ? "#0E7D71" : props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
     height: 25px;
     width: 25px;
     border-radius: 25px;
