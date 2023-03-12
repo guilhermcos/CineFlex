@@ -44,7 +44,7 @@ export default function SuccessPage(props) {
 
             </TextContainer>
 
-            <Link onClick={setDadosCompra(0)} to={'/'}><button data-test="go-home-btn">Voltar para Home</button></Link>
+            <Link onClick={setDadosCompra} to={'/'}><button data-test="go-home-btn">Voltar para Home</button></Link>
         </PageContainer>
     )
 }

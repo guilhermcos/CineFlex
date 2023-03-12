@@ -30,17 +30,20 @@ export default function SeatsPage(props) {
     function retornaDados() {
         let dadosCompradoresSucesso = selecionados.map((item) => { return { id: item.id, assento: item.assento, nome: null, cpf: null } });
         compradores.forEach((elemento, index) => {
-            dadosCompradoresSucesso[index].nome = elemento.nome;
-            dadosCompradoresSucesso[index].cpf = elemento.cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+            if (elemento.name !== null) {
+                dadosCompradoresSucesso[index].nome = elemento.nome;
+            }
+            if (elemento.cpf !== null) {
+                dadosCompradoresSucesso[index].cpf = elemento.cpf.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
+            }
         });
         dadosCompradoresSucesso = { compradores: dadosCompradoresSucesso, movieInfo: assentosData.movie, dayInfo: assentosData.day, sessao: assentosData.name };
         setDadosCompra(dadosCompradoresSucesso);
     }
 
-    function finalizarReserva(e) {
+    async function finalizarReserva(e) {
         e.preventDefault();
         const idsAssentos = selecionados.map((assento) => assento.id);
-
         const arrayFinal = [{ ids: idsAssentos, compradores: compradores }]
 
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`;
@@ -51,8 +54,8 @@ export default function SeatsPage(props) {
             }
         )
         promise.then((res) => {
-            retornaDados();
             navigate('/sucesso');
+            retornaDados();
         })
         promise.catch((err) => {
             console.log("erro");
@@ -163,7 +166,7 @@ export default function SeatsPage(props) {
                 </div>
             </FooterContainer>
 
-        </PageContainer>
+        </PageContainer >
     )
 }
 
