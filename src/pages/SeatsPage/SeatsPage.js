@@ -94,8 +94,10 @@ export default function SeatsPage(props) {
                                     setCompradores([...compradores, { idAssento: seatInfo.id, nome: null, cpf: null }])
                                     console.log(compradores)
                                 } else {
-                                    setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
-                                    setCompradores((compradores) => compradores.filter((objeto) => objeto.idAssento !== seatInfo.id));
+                                    if (window.confirm('Você tem certeza que quer remover esse assento e remover os dados?')) {
+                                        setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
+                                        setCompradores((compradores) => compradores.filter((objeto) => objeto.idAssento !== seatInfo.id));
+                                    }
                                 }
                             }}
                             key={seatInfo.id} isAvailable={seatInfo.isAvailable}
