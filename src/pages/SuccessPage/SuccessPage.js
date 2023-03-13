@@ -4,16 +4,15 @@ import styled from "styled-components"
 
 export default function SuccessPage(props) {
     const { dadosCompra, setDadosCompra } = props;
-    const navigate = useNavigate();
 
 
     if (dadosCompra === 0) {
         return (
             <PageContainer>
                 <h1>Parece que a página foi atualizada</h1>
-                <Link onClick={setDadosCompra(0)} to={'/'}><button>Voltar para Home</button></Link>
+                <Link onClick={() => setDadosCompra(0)} to={'/'}><button>Voltar para Home</button></Link>
             </PageContainer>
-        )
+        );
     }
 
     return (
