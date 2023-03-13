@@ -37,10 +37,10 @@ export default function SuccessPage(props) {
                 <strong><p>Compradores:</p></strong>
                 {dadosCompra.compradores.map((elemento) => {
                     return (
-                        <>
+                        <div key={elemento.cpf}>
                             <p>Nome: {elemento.nome}</p>
                             <p>CPF: {elemento.cpf}</p>
-                        </>
+                        </div>
                     )
                 })}
 

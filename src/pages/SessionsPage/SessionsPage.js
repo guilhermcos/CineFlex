@@ -14,7 +14,6 @@ export default function SessionsPage(props) {
         setButton(true)
         const promise = axios.get(url);
         promise.then((res) => {
-            console.log(res.data);
             setSessionData(res.data);
         });
         promise.catch((err) => {

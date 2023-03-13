@@ -19,7 +19,6 @@ export default function SeatsPage(props) {
 
         const promise = axios.get(url);
         promise.then((res) => {
-            console.log(res.data);
             setAssentosData(res.data);
         });
         promise.catch((err) => {
@@ -93,7 +92,6 @@ export default function SeatsPage(props) {
                                 if (!selecionados.some((objeto) => objeto.id === seatInfo.id)) {
                                     seatInfo.isAvailable ? setSelecionados([...selecionados, { id: seatInfo.id, assento: seatInfo.name }]) : alert("Esse assento não está disponível");
                                     setCompradores([...compradores, { idAssento: seatInfo.id, nome: null, cpf: null }]);
-                                    console.log(compradores);
                                 } else {
                                     if (window.confirm('Você tem certeza que quer remover esse assento e remover os dados?')) {
                                         setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
