@@ -5,21 +5,30 @@ import HomePage from "./pages/HomePage/HomePage";
 import SeatsPage from "./pages/SeatsPage/SeatsPage";
 import SessionsPage from "./pages/SessionsPage/SessionsPage";
 import SuccessPage from "./pages/SuccessPage/SuccessPage";
-
+import { Link, useLocation,useNavigate } from "react-router-dom";
+import BackButton from "./components/BackButton";
 
 export default function App() {
     const [dadosCompra, setDadosCompra] = useState(0);
+    const [button, setButton] = useState(false);
 
     return (
         <BrowserRouter>
             <>
-                <NavContainer>CINEFLEX</NavContainer>
+                <NavContainer button={button}>
+                    <img
+                    data-test="go-home-header-btn"
+                    onClick={button ? () => window.history.back() : null} 
+                    src="assets/arrow-back-outline.svg" 
+                    alt="" />
+                    CINEFLEX
+                </NavContainer>
 
                 <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/sessoes/:idFilme" element={<SessionsPage />} />
-                    <Route path="/assentos/:idSessao" element={<SeatsPage setDadosCompra={setDadosCompra} />} />
-                    <Route path="/sucesso" element={<SuccessPage setDadosCompra={setDadosCompra} dadosCompra={dadosCompra} />} />
+                    <Route path="/" element={<HomePage setButton={setButton} />} />
+                    <Route path="/sessoes/:idFilme" element={<SessionsPage setButton={setButton} />} />
+                    <Route path="/assentos/:idSessao" element={<SeatsPage setDadosCompra={setDadosCompra} setButton={setButton} />} />
+                    <Route path="/sucesso" element={<SuccessPage setDadosCompra={setDadosCompra} dadosCompra={dadosCompra} setButton={setButton} />} />
                 </Routes>
             </>
         </BrowserRouter>
@@ -41,6 +50,13 @@ const NavContainer = styled.div`
                     top: 0;
                     a {
                         text-decoration: none;
-                    color: #E8833A;
+                        color: #E8833A;
+                    }
+                    img {
+                        display: ${(props) => props.button ? "initial" : "none"};
+                        position: absolute;
+                        height: 55%;
+                        left: 10px;
+                        top: 18px;
                     }
                     `;

@@ -3,10 +3,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function HomePage() {
+export default function HomePage(props) {
+    const { setButton } = props
     const [filmes, setFilmes] = useState([]);
 
     useEffect(() => {
+        setButton(false)
         const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
         const requisicao = axios.get(url);
         requisicao.then((res) => {

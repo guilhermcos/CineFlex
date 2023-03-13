@@ -4,12 +4,14 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function SessionsPage() {
+export default function SessionsPage(props) {
+    const { setButton } = props
     const { idFilme } = useParams();
     const [sessionData, setSessionData] = useState(undefined);
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
 
     useEffect(() => {
+        setButton(true)
         const promise = axios.get(url);
         promise.then((res) => {
             console.log(res.data);

@@ -3,8 +3,11 @@ import { useNavigate, Link } from "react-router-dom";
 import styled from "styled-components"
 
 export default function SuccessPage(props) {
-    const { dadosCompra, setDadosCompra } = props;
+    const { dadosCompra, setDadosCompra, setButton } = props;
 
+    useEffect(() => {
+        setButton(false);
+    }, [])
 
     if (dadosCompra === 0) {
         return (
@@ -39,7 +42,7 @@ export default function SuccessPage(props) {
                             <p>CPF: {elemento.cpf}</p>
                         </>
                     )
-                })};
+                })}
 
             </TextContainer>
 

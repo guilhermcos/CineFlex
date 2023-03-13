@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 export default function SeatsPage(props) {
-    const { setDadosCompra } = props;
+    const { setDadosCompra, setButton } = props;
     const { idSessao } = useParams();
     const [assentosData, setAssentosData] = useState(undefined);
     const [selecionados, setSelecionados] = useState([]);
@@ -14,6 +14,7 @@ export default function SeatsPage(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        setButton(true)
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
 
         const promise = axios.get(url);
@@ -105,7 +106,7 @@ export default function SeatsPage(props) {
                             {seatInfo.name}
                         </SeatItem>
                     )
-                })};
+                })}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -152,7 +153,7 @@ export default function SeatsPage(props) {
                                 />
                             </div>
                         )
-                    })};
+                    })}
 
                     <button data-test="book-seat-btn" type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
                 </form>
