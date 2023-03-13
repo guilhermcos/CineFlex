@@ -1,6 +1,6 @@
-import styled from "styled-components"
-import axios from "axios"
-import { useEffect, useState } from "react"
+import styled from "styled-components";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
@@ -11,10 +11,10 @@ export default function HomePage() {
         const requisicao = axios.get(url);
         requisicao.then((res) => {
             setFilmes(res.data);
-        })
+        });
         requisicao.catch((err) => {
             console.log(err.response.data);
-        })
+        });
     }, []);
 
     if (filmes.length === 0) {
@@ -23,7 +23,7 @@ export default function HomePage() {
                 <h1>Carregando...</h1>
             </PageContainer>
         );
-    }
+    };
 
     return (
         <PageContainer>
@@ -34,14 +34,14 @@ export default function HomePage() {
                         <MovieContainer data-test="movie" key={filme.title}>
                             <Link to={`sessoes/${filme.id}`}> <img src={filme.posterURL} alt="poster" /> </Link>
                         </MovieContainer>
-                    )
+                    );
                 })}
 
             </ListContainer>
 
         </PageContainer>
-    )
-}
+    );
+};
 
 const PageContainer = styled.div`
     display: flex;
@@ -57,14 +57,14 @@ const PageContainer = styled.div`
         margin-top: 150px;
         font-size: 40px;
     }
-`
+`;
 const ListContainer = styled.div`
     width: 330px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     padding: 10px;
-`
+`;
 const MovieContainer = styled.div`
     width: 145px;
     height: 210px;
@@ -78,4 +78,4 @@ const MovieContainer = styled.div`
         width: 130px;
         height: 190px;
     }
-`
+`;

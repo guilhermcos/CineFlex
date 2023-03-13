@@ -1,10 +1,10 @@
-import { useState } from "react"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
-import styled from "styled-components"
-import HomePage from "./pages/HomePage/HomePage"
-import SeatsPage from "./pages/SeatsPage/SeatsPage"
-import SessionsPage from "./pages/SessionsPage/SessionsPage"
-import SuccessPage from "./pages/SuccessPage/SuccessPage"
+import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import styled from "styled-components";
+import HomePage from "./pages/HomePage/HomePage";
+import SeatsPage from "./pages/SeatsPage/SeatsPage";
+import SessionsPage from "./pages/SessionsPage/SessionsPage";
+import SuccessPage from "./pages/SuccessPage/SuccessPage";
 
 
 export default function App() {
@@ -23,8 +23,8 @@ export default function App() {
                 </Routes>
             </>
         </BrowserRouter>
-    )
-}
+    );
+};
 
 
 const NavContainer = styled.div`
@@ -43,4 +43,4 @@ const NavContainer = styled.div`
                         text-decoration: none;
                     color: #E8833A;
                     }
-                    `
+                    `;

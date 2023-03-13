@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
-import styled from "styled-components"
+import { useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 
 export default function SeatsPage(props) {
     const { setDadosCompra } = props;
@@ -14,16 +14,16 @@ export default function SeatsPage(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`
+        const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`;
 
         const promise = axios.get(url);
         promise.then((res) => {
             console.log(res.data);
             setAssentosData(res.data);
-        })
+        });
         promise.catch((err) => {
             console.log(err.response.data);
-        })
+        });
 
     }, []);
 
@@ -44,7 +44,7 @@ export default function SeatsPage(props) {
     async function finalizarReserva(e) {
         e.preventDefault();
         const idsAssentos = selecionados.map((assento) => assento.id);
-        const arrayFinal = [{ ids: idsAssentos, compradores: compradores }]
+        const arrayFinal = [{ ids: idsAssentos, compradores: compradores }];
 
         const url = `https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many`;
         const promise = axios.post(url,
@@ -52,17 +52,17 @@ export default function SeatsPage(props) {
                 ids: idsAssentos,
                 compradores: compradores
             }
-        )
+        );
         promise.then((res) => {
             navigate('/sucesso');
             retornaDados();
-        })
+        });
         promise.catch((err) => {
             console.log("erro");
-            console.log(err.response.data)
-        })
+            console.log(err.response.data);
+        });
 
-    }
+    };
 
     function mudancaInput(id, inputName, inputValue) {
         const index = compradores.indexOf(compradores.filter((objeto) => objeto.idAssento === id)[0]);
@@ -72,11 +72,11 @@ export default function SeatsPage(props) {
             setCompradores(novoCompradores);
         } else if (inputName === "cpf") {
             novoCompradores[index].cpf = inputValue;
-            setCompradores(novoCompradores)
+            setCompradores(novoCompradores);
         }
-    }
+    };
 
-    if (assentosData === undefined) { return <p>Carregando...</p> }
+    if (assentosData === undefined) { return <p>Carregando...</p> };
 
     return (
         <PageContainer>
@@ -91,13 +91,13 @@ export default function SeatsPage(props) {
                             onClick={() => {
                                 if (!selecionados.some((objeto) => objeto.id === seatInfo.id)) {
                                     seatInfo.isAvailable ? setSelecionados([...selecionados, { id: seatInfo.id, assento: seatInfo.name }]) : alert("Esse assento não está disponível");
-                                    setCompradores([...compradores, { idAssento: seatInfo.id, nome: null, cpf: null }])
-                                    console.log(compradores)
+                                    setCompradores([...compradores, { idAssento: seatInfo.id, nome: null, cpf: null }]);
+                                    console.log(compradores);
                                 } else {
                                     if (window.confirm('Você tem certeza que quer remover esse assento e remover os dados?')) {
                                         setSelecionados((selecionados) => selecionados.filter((item) => item.id !== seatInfo.id));
                                         setCompradores((compradores) => compradores.filter((objeto) => objeto.idAssento !== seatInfo.id));
-                                    }
+                                    };
                                 }
                             }}
                             key={seatInfo.id} isAvailable={seatInfo.isAvailable}
@@ -105,7 +105,7 @@ export default function SeatsPage(props) {
                             {seatInfo.name}
                         </SeatItem>
                     )
-                })}
+                })};
             </SeatsContainer>
 
             <CaptionContainer>
@@ -152,7 +152,7 @@ export default function SeatsPage(props) {
                                 />
                             </div>
                         )
-                    })}
+                    })};
 
                     <button data-test="book-seat-btn" type="submit" disabled={(selecionados.length > 0) ? false : true}>Reservar Assento(s)</button>
                 </form>
@@ -170,7 +170,7 @@ export default function SeatsPage(props) {
 
         </PageContainer >
     )
-}
+};
 
 const PageContainer = styled.div`
     display: flex;
@@ -183,7 +183,7 @@ const PageContainer = styled.div`
     margin-top: 30px;
     padding-bottom: 120px;
     padding-top: 70px;
-`
+`;
 const SeatsContainer = styled.div`
     width: 330px;
     display: flex;
@@ -192,7 +192,7 @@ const SeatsContainer = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 20px;
-`
+`;
 const FormContainer = styled.div`
     width: calc(100vw - 40px); 
     display: flex;
@@ -206,7 +206,7 @@ const FormContainer = styled.div`
     input {
         width: calc(100vw - 60px);
     }
-`
+`;
 const CaptionContainer = styled.div`
     display: flex;
     flex-direction: row;
@@ -225,7 +225,7 @@ const CaptionContainer = styled.div`
         background-color: #FBE192;
         border: 1px solid #F7C52B;
     }
-`
+`;
 const CaptionCircle = styled.div`
     height: 25px;
     width: 25px;
@@ -234,13 +234,13 @@ const CaptionCircle = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
-`
+`;
 const CaptionItem = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 12px;
-`
+`;
 const SeatItem = styled.div`
     background-color: ${props => props.selecionado ? "#1AAE9E" : props.isAvailable ? "#C3CFD9" : "#FBE192"};    // Essa cor deve mudar
     border: 1px solid ${props => props.selecionado ? "#0E7D71" : props.isAvailable ? "#808F9D" : "#F7C52B"};         // Essa cor deve mudar
@@ -253,7 +253,7 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
-`
+`;
 const FooterContainer = styled.div`
     width: 100%;
     height: 120px;
@@ -291,4 +291,4 @@ const FooterContainer = styled.div`
             }
         }
     }
-`
+`;

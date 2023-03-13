@@ -39,14 +39,14 @@ export default function SuccessPage(props) {
                             <p>CPF: {elemento.cpf}</p>
                         </>
                     )
-                })}
+                })};
 
             </TextContainer>
 
             <Link onClick={setDadosCompra} to={'/'}><button data-test="go-home-btn">Voltar para Home</button></Link>
         </PageContainer>
     )
-}
+};
 
 const PageContainer = styled.div`
     display: flex;
@@ -75,7 +75,7 @@ const PageContainer = styled.div`
         text-align: center;
         color: #247A6B;
     }
-`
+`;
 const TextContainer = styled.div`
     width: 100%;
     display: flex;
@@ -89,4 +89,4 @@ const TextContainer = styled.div`
     div {
         margin-bottom: 15px;
     }
-`
+`;
