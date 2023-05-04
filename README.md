@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+![Cineflex-gif](https://user-images.githubusercontent.com/120587680/236305444-d8b1aa89-fe60-4781-90ac-b268cdac361a.gif)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Introduction
 
-## Available Scripts
+This WEB MOBILE project was developed using ReactJS and is simulates the purchase of movie tickets in a cinema. Below you will find a description of the project's functionalities.
 
-In the project directory, you can run:
+## Deploy
+Project for Mobile
+You can test the app here: https://projeto10-cineflex-teal-five.vercel.app/ obs: As a free hosting service is being used, the initial request may take a few seconds to load. However, once the server is up and running, the response time should improve significantly.
 
-### `npm start`
+## Functionalities
+### Movie Selection
+Upon accessing the / route, the user will have access to the list of available movies. The movie information is obtained through a provided API. When clicking on a movie, the user is redirected to the /sessions/:movieId route, where :movieId is the id of the clicked movie.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Session Selection
+At the /sessions/:movieId route, from the movie id in the URL, the available sessions for the movie are obtained from the API and displayed according to the provided layout. When clicking on a session, the user is redirected to the /seats/:sessionId route, where :sessionId is the id of the selected session.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Seat Selection
+At the /seats/:sessionId route, from the session id, the session data is fetched from the API and displayed according to the provided layout. The user can select multiple seats and enter the name and CPF of the buyer for each selected seat. When clicking on an available seat, the seat is marked as "Selected". When clicking again on a selected seat, it goes back to "Available". When clicking on an unavailable seat, an alert of "This seat is not available" is displayed. When clicking on "Reserve seat(s)", the request is sent to the server and the user is redirected to the /success route. This makes the marked seats unavailable for other bookings.
 
-### `npm test`
+### Footer
+Throughout the Session and Seat screens, a footer is displayed with information about the selected movie. This information is obtained through API calls on each screen.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Success
+At the /success route, the layout is displayed according to the provided one, with the data of the made request. When clicking on "Back to Home", the user returns to the initial route (/), with the request zeroed.
 
-### `npm run build`
+### Back Button
+A back button has been added at the top of the site to the left. When clicking on the back button, the user returns to the previously viewed page. The button is not displayed on the initial screen.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Buyer Information per Seat
+The Name and CPF fields for the buyer are no longer a single field, but are now fields for each selected seat. That is, each selected seat has its own Name and CPF field. As the person selects seats, the fields are displayed below in the quantity that corresponds to the selected seats. When unchecking a seat that already had filled data, a confirm message asks the user if they really want to remove the seat and erase the data. On the success screen, the names and CPFs of all buyers are displayed.
